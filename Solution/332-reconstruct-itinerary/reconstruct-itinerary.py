@@ -1,30 +1,17 @@
 class Solution:
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-
-        graph = defaultdict(list)
-
-        for src, dst in tickets:
-            graph[src].append(dst)
-        
-
-        for src in graph: 
-            graph[src].sort(reverse=True)
-
-        route = []
-
-        def dfs(airport):
-            dest = graph[airport]
-
+        loc = defaultdict(list)
+        for arv, des in sorted(tickets, reverse=True):
+            loc[arv].append(des)
+        for src in loc:
+            loc[src].sort(reverse=True)
+        res = []
+        def dfs(node):
+            dest = loc[node]
             while dest:
-                curr = dest.pop()
-                dfs(curr)
-            route.append(airport)
-
+                cur = dest.pop()
+                dfs(cur)
+            res.append(node)
         dfs("JFK")
 
-        route.reverse()
-        return route
-
-
-
-        return route
+        return res[::-1]
