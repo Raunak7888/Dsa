@@ -1,14 +1,8 @@
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        print(len(nums))
-        print(nums[0])
-        if len(nums) == 1:
-            return True
-        far = 0
-        for i,num in enumerate(nums):
-            if i>far:
-                return False
-            far = max(far,i+num)
-        return True if far else False 
-        
-    
+        gas = 0
+        for n in nums:
+            if gas < 0: return False
+            elif n > gas: gas = n
+            gas -= 1
+        return True
