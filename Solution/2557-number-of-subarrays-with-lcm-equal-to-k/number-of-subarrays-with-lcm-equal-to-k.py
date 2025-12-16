@@ -1,30 +1,116 @@
-import math
-from typing import List
+from math import lcm
+
 
 class Solution:
     def subarrayLCM(self, nums: List[int], k: int) -> int:
+
         n = len(nums)
-        total_count = 0
-        def get_lcm(a, b):
-            if a == 0 or b == 0:
-                return 0
-            if a == 1: return b 
-            if b == 1: return a
-            return (a * b) // math.gcd(a, b)
+
+        num_subarrays = 0
+        first = 0
+        first_in_run = first
+        last = first
+        lcm_prefix = [1]
+        lcm_suffix = None
+        while last < n:
+            if k % nums[last] != 0:
+                first = last + 1
+                while first < n:
+                    if k % nums[first] == 0:
+                        break
+                    first += 1
+                else:
+                    return num_subarrays
+                first_in_run = first
+                last = first
+                lcm_prefix = [1]
+                lcm_suffix = None
+
+            else:
+                lcm_prefix.append(lcm(lcm_prefix[-1], nums[last]))
+                if lcm_prefix[-1] == k:
+                    first = last
+                    lcm_suffix = [nums[first]]
+                    while lcm_suffix[-1] != k:
+                        first -= 1
+                        lcm_suffix.append(lcm(lcm_suffix[-1], nums[first]))
+                    num_subarrays += first - first_in_run + 1
+                    print(num_subarrays, first, first_in_run)
+
+                last += 1
+
+        return num_subarrays
+
+
+
+
+    def subarrayLCM2(self, nums: List[int], k: int) -> int:
+
+        n = len(nums)
+
+        num_subarrays = 0
+
+        first = 0
+        while first < n:
+            if k % nums[first] == 0:
+                break
+            first += 1
+        else:
+            return num_subarrays
+        first_in_run = first
+        last = first + 1
+        lcm_prefix = [nums[first]]
+        lcm_suffix = None
+
+        while last < n:
+            if k % nums[last] != 0:
+                first = last + 1
+                while first < n:
+                    if k % nums[first] == 0:
+                        break
+                    first += 1
+                else:
+                    return num_subarrays
+                first_in_run = first
+                last = first
+                lcm_prefix = [1]
+                lcm_suffix = None
+
+            else:
+                lcm_prefix.append(lcm(lcm_prefix[-1], nums[last]))
+                if lcm_prefix[-1] == k:
+                    first = last
+                    lcm_suffix = [nums[first]]
+                    while lcm_suffix[-1] != k:
+                        first -= 1
+                        lcm_suffix.append(lcm(lcm_suffix[-1], nums[first]))
+                    num_subarrays += first - first_in_run + 1
+                    print(num_subarrays, first, first_in_run)
+
+
+                    #first += 1
+                    #if first > last:
+                    #    while first < n:
+                    #        if k % nums[first] == 0:
+                    #            break
+                    #        first += 1
+                    #    else:
+                    #        return num_subarrays
+                    #    if first > last + 1:
+                    #        first_in_run = first
+                    #    last = first
+                    #    lcm_prefix = [nums[first]]
+                    #else:
+                    #lcm_prefix = [lcm_suffix[-2]]
+                last += 1
         
-        for i in range(n):
-            current_lcm = 1
-            for j in range(i, n):
-                num_j = nums[j]
-                if k % num_j != 0:
-                    break 
-                if current_lcm == k:
-                    total_count += 1
-                    continue
-                new_lcm = get_lcm(current_lcm, num_j)
-                if new_lcm > k:
-                    break
-                current_lcm = new_lcm
-                if current_lcm == k:
-                    total_count += 1
-        return total_count
+        if lcm_prefix[-1] == k:
+            first = last - 1
+            lcm_suffix = [nums[first]]
+            while lcm_suffix[-1] != k:
+                first -= 1
+                lcm_suffix.append(lcm(lcm_suffix[-1], nums[first]))
+            num_subarrays += first - first_in_run + 1
+            print(num_subarrays, first, first_in_run)
+
+        return num_subarrays
