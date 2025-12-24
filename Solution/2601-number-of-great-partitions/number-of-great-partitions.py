@@ -1,14 +1,9 @@
 class Solution:
-    def countPartitions(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        dp = [[0] * (k + 1)] + [[-1] * (k + 1) for _ in range(n)]
-        dp[0][0] = 1
-        def subsetSumCounts(s, idx):
-            if s < 0:
-            	return 0
-            if dp[idx][s] < 0:
-                dp[idx][s] = subsetSumCounts(s, idx - 1) + subsetSumCounts(s - nums[idx - 1], idx - 1)
-            return dp[idx][s]
-                
-        invalid_pairs = sum([subsetSumCounts(i, n) for i in range(k)]) * 2
-        return max(2**n - invalid_pairs, 0) % (10**9 + 7)
+    def countPartitions(self, A: List[int], k: int) -> int:
+        if sum(A) < k * 2: return 0
+        mod = 10**9 + 7
+        dp = [1] + [0] * (k - 1)
+        for a in A:
+            for i in range(k - 1 - a, -1, -1):
+                dp[i + a] += dp[i]
+        return (pow(2, len(A), mod) - sum(dp) * 2) % mod
