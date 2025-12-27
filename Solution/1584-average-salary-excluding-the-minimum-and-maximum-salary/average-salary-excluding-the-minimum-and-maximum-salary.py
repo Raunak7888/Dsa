@@ -1,11 +1,8 @@
 class Solution:
-    def average(self, nums: List[int]) -> float:
-        mx = 0
-        mi = 10000000
-        avg = 0
-        for i in nums:
-            avg+=i
-            mx = max(i,mx)
-            mi = min(i,mi)
+    def average(self, salary: List[int]) -> float:
+        min_sal = min(salary)
+        max_sal = max(salary)
+        salary_sum = sum(salary) - min_sal - max_sal
+        return salary_sum / (len(salary)-2)
+
         
-        return (avg-mx-mi)/(len(nums)-2)
