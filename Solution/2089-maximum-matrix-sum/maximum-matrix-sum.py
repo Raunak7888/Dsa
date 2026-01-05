@@ -1,17 +1,22 @@
 class Solution:
-    def maxMatrixSum(self, m: List[List[int]]) -> int:
-        n = len(m)
-        res = 0
-        minVal = 9999999
-        r = 0
-        for i in range(n):
-            for j in range(n):
-                res += abs(m[i][j])
-                minVal = min(minVal, abs(m[i][j]))
-                if m[i][j]<0:
-                    r+=1
-        print(res,minVal,r)
-        if r%2==0:
-            return res
-        else: 
-            return res-minVal*2
+    def maxMatrixSum(self, a: List[List[int]]) -> int:
+        pos_sum = 0
+        
+        num_neg = 0
+        least_abs = inf
+
+        for row in a:
+            for x in row:
+                if x < 0:
+                    num_neg += 1
+                    x = -x
+
+                if x < least_abs:
+                    least_abs = x
+                
+                pos_sum += x
+        
+        if num_neg % 2 == 0:
+            return pos_sum
+        else:
+            return pos_sum - least_abs * 2
