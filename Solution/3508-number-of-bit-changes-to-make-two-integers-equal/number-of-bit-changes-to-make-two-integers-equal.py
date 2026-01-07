@@ -5,7 +5,7 @@ class Solution:
         if len(nb) >= len(kb):
             kb = "0"*(len(nb)-len(kb)) + kb
         else:
-            nb = "0"*(len(kb)-len(nb)) + nb
+            return -1
         print(nb)
         print(kb)
         if kb == nb:
