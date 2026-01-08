@@ -1,21 +1,22 @@
 class Solution:
+    def countpair(self, nums, d):
+        left = 0
+        count = 0
+        for right in range(len(nums)):
+            while nums[right]-nums[left] > d:
+                left += 1
+            count += right-left
+        return count        
     def smallestDistancePair(self, nums: List[int], k: int) -> int:
-        def enough(distance) -> bool:  # two pointers
-            count, i, j = 0, 0, 0
-            while i < n or j < n:
-                while j < n and nums[j] - nums[i] <= distance:
-                    j += 1
-                count += j - i - 1
-                i += 1
-            return count >= k
-
         nums.sort()
-        n = len(nums)
-        left, right = 0, nums[-1] - nums[0]
+        left = 0
+        right = nums[-1]-nums[0]
         while left < right:
-            mid = left + (right - left) // 2
-            if not enough(mid):
+            mid = (left+right)//2
+            count = self.countpair(nums,mid)
+            if count < k:
                 left = mid + 1
             else:
                 right = mid
         return left
+        
