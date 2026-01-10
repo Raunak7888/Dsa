@@ -1,30 +1,16 @@
 class Solution:
     def minimumDeleteSum(self, s1: str, s2: str) -> int:
-        if len(s2) > len(s1):
-            s1, s2 = s2, s1
+        len1, len2 = len(s1), len(s2)
+        dp = [0] * (len2 + 1)
+        for i in range(1, len1 + 1):
+            dp_new = dp.copy()
 
-        n, m = len(s1), len(s2)
-
-        dp = [0]*(m+1)
-
-        for j in range(1, m+1):
-            dp[j] = dp[j-1] + ord(s2[j-1])
-        
-        for i in range(1, n+1):
-            prev_diag = dp[0]
-            dp[0] += ord(s1[i-1])
-
-            for j in range(1, m+1):
-
-                temp = dp[j]
-
-                if s1[i-1] == s2[j-1]:
-                    dp[j] = prev_diag
+            for j in range(1, len2 + 1):
+                if s1[i - 1] == s2[j - 1]:
+                    dp_new[j] = ord(s2[j - 1]) + dp[j - 1]
                 else:
-                    dp[j] = min(
-                        dp[j-1]+ord(s2[j-1]),
-                        temp+ord(s1[i-1])
-                    )
-                prev_diag = temp
-
-        return dp[m]
+                    dp_new[j] = max(dp[j], dp_new[j - 1])
+            dp = dp_new
+        ascii1 = sum([ord(c) for c in s1])
+        ascii2 = sum([ord(c) for c in s2])
+        return ascii1 + ascii2 - (2 * dp[len2])
