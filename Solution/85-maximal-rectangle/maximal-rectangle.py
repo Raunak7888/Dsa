@@ -1,13 +1,23 @@
 class Solution:
-    def maximalRectangle(self, g: List[List[str]]) -> int:
-        return max(map(self.largestRectangleArea,
-            zip(*(accumulate(map(int,r),lambda p,v:v*-~p) for r in g))))
-        # 84. Largest Rectangle in Histogram
-    def largestRectangleArea(self, a: List[int]) -> int:
-        a += (0,) # force stack to pop all at the end
-        g = lambda q,v,j,res:q[0]>=v and g(q[3],v,j+q[1],max(res,q[0]*(j+q[1]),q[2])) \
-            or [v,j+1,max(res,v*(j+1),q[2]),q]
-        return (f:=lambda q,i:i<len(a) and f(g(q,a[i],0,0),i+1) or q)([-1,0,0,[]],0)[2]
-        #                                                               ^ ^ ^ ^
-        #                                                               0 1 2 3
-        # 0 - cur stack value, 1 - counter, 2 - result, 3 - stack implementation
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        # edge case 不要忘记！
+        if not matrix:
+           return 0
+        histogram = [0] * (len(matrix[0]) + 1)
+        maxSize = 0
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                histogram[j] = histogram[j] + 1 if matrix[i][j] == "1" else 0
+            maxSize = max(maxSize, self.get_largest_from_histogram(histogram))
+        return maxSize
+    
+    def get_largest_from_histogram(self, array):
+        stack = []
+        max_area = 0
+        for i in range(len(array)):
+            while stack and array[stack[-1]] > array[i]:
+                top_index = stack.pop()
+                max_area = max(max_area, array[top_index] * ((i - stack[-1] - 1) if stack else i))
+
+            stack.append(i)
+        return max_area
