@@ -1,9 +1,15 @@
 class Solution:
-    def minTimeToVisitAllPoints(self, p: List[List[int]]) -> int:
-        Ans = 0
-        for i in range(1, len(p)):
-            Ans += max(
-                abs(p[i][0] - p[i - 1][0]),
-                abs(p[i][1] - p[i - 1][1])
-            )
-        return Ans
+    # n: len(points)
+    # Time: O(n)
+    # Space: O(1)
+    def minTimeToVisitAllPoints(self, points: List[List[int]]) -> int:
+        total_time = 0
+        
+        for i in range(len(points) - 1):
+            x1, y1 = points[i]
+            x2, y2 = points[i + 1]
+
+            time = max(abs(x2 - x1), abs(y2 - y1))
+            total_time += time
+        
+        return total_time
