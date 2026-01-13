@@ -1,14 +1,16 @@
 class Solution:
     def minOperations(self, nums: List[int]) -> int:
-        if len(nums) == 1:
-            return 0
-        m = set()
-        for i in range(len(nums)-1,-1,-1):
-            if len(m) == 0:
-                m.add(nums[i])
-            elif nums[i] in m:
-                up = i+1
-                return math.ceil(up/3)
+        seen = set()
+
+        cnt = 0
+        for num in reversed(nums):
+
+            if num not in seen:
+                cnt += 1
+                seen.add(num)
             else:
-                m.add(nums[i])
-        return 0
+                break
+
+        n = len(nums)
+        need_remove = n - cnt
+        return math.ceil(need_remove / 3)
