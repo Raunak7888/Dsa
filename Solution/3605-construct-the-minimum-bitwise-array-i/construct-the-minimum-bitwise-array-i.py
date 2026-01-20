@@ -1,10 +1,12 @@
 class Solution:
     def minBitwiseArray(self, nums: List[int]) -> List[int]:
-        for i in range(len(nums)):
-            res = -1
-            d = 1
-            while (nums[i] & d) != 0:
-                res = nums[i] - d
-                d <<= 1
-            nums[i] = res
-        return nums
+        n = len(nums)
+        ans = [-1] * n
+
+        for i in range(n):
+            if not nums[i] % 2:
+                continue
+
+            ans[i] = nums[i] - ((nums[i] + 1) & (-nums[i] - 1)) // 2
+        
+        return ans
