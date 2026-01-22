@@ -1,26 +1,24 @@
-from math import inf
-
 class Solution:
-    def minimumPairRemoval(self, nums):
-        def is_sorted(arr):
-            return all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1))
+    def minimumPairRemoval(self, nums: List[int]) -> int:
+        c=0
+        i=0
+        n=len(nums)
+        while i<n-1:
+            if(nums[i]>nums[i+1]):
+                mini=math.inf
+                index=0
+                for j in range(n-1):
+                    if(mini>(nums[j]+nums[j+1])):
+                        mini=nums[j]+nums[j+1]
+                        index=j
+                nums[index]=mini
+                nums.pop(index+1)
+                c=c+1
+                n=n-1
+                i=0
+            else:
+                i=i+1
+        return c
 
-        def merge_min_pair(arr):
-            min_sum = inf
-            idx = 0
 
-            for i in range(len(arr) - 1):
-                s = arr[i] + arr[i + 1]
-                if s < min_sum:
-                    min_sum = s
-                    idx = i
-
-            return arr[:idx] + [min_sum] + arr[idx + 2:]
-
-        operations = 0
-
-        while not is_sorted(nums):
-            nums = merge_min_pair(nums)
-            operations += 1
-
-        return operations
+        
